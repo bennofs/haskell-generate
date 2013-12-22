@@ -1,6 +1,7 @@
 name:          haskell-generate
 version:       0.1
 license:       BSD3
+category:      Code Generation, Language
 cabal-version: >= 1.10
 license-file:  LICENSE
 author:        Benno Fünfstück
