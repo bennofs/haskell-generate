@@ -1,0 +1,55 @@
+name:          haskell-generate
+version:       0.1
+license:       BSD3
+cabal-version: >= 1.10
+license-file:  LICENSE
+author:        Benno Fünfstück
+maintainer:    Benno Fünfstück <benno.fuenfstueck@gmail.com>
+stability:     experimental
+homepage:      http://github.com/bennofs/haskell-generate/
+bug-reports:   http://github.com/bennofs/haskell-generate/issues
+copyright:     Copyright (C) 2013 Benno Fünfstück
+synopsis:      haskell-generate
+description:   haskell-generate
+build-type:    Custom
+
+extra-source-files:
+  .ghci
+  .gitignore
+  .travis.yml
+  .vim.custom
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/bennofs/haskell-generate.git
+
+library
+  hs-source-dirs: src
+  default-language: Haskell2010
+  ghc-options: -Wall
+  build-depends:
+      base >= 4.4 && < 5
+    , transformers
+    , haskell-src-exts
+    , containers
+    , template-haskell
+  exposed-modules:
+      Language.Haskell.Generate
+      Language.Haskell.Generate.Base
+      Language.Haskell.Generate.TH
+      Language.Haskell.Generate.PreludeDef
+
+test-suite doctests
+  type:    exitcode-stdio-1.0
+  main-is: doctests.hs
+  default-language: Haskell2010
+  build-depends:
+      base
+    , directory >= 1.0
+    , doctest >= 0.9.1
+    , filepath
+  ghc-options: -Wall -threaded
+  if impl(ghc<7.6.1)
+    ghc-options: -Werror
+  hs-source-dirs: tests
