@@ -150,7 +150,6 @@ applyE a b = wrap $ liftM (foldl1 App) $ sequence [unwrap a, unwrap b]
   where wrap = fmap Expression
         unwrap = fmap runExpression
 
-
 -- | Operator for 'applyE'. 
 (<>$) :: ExpG (a -> b) -> ExpG a -> ExpG b
 (<>$) = applyE

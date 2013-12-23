@@ -1,5 +1,5 @@
 name:          haskell-generate
-version:       0.1
+version:       0.2
 license:       BSD3
 category:      Code Generation, Language
 cabal-version: >= 1.10
