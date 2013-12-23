@@ -6,7 +6,7 @@
 module Language.Haskell.Generate.PreludeDef where
 
 import Language.Haskell.Exts.Syntax
-import Language.Haskell.Generate.Base
+import Language.Haskell.Generate.Monad
 import Language.Haskell.Generate.TH
 
 --------------------------------------------------------------------------------
@@ -66,22 +66,22 @@ fmap concat $ mapM declareNamedSymbol
 (<>.) a b = dot' <>$ a <>$ b
 
 tuple0 :: ExpG ()
-tuple0 = return $ Var $ Special UnitCon
+tuple0 = returnE $ Var $ Special UnitCon
 
 tuple2 :: ExpG (a -> b -> (a,b))
-tuple2 = return $ Var $ Special $ TupleCon Boxed 2
+tuple2 = returnE $ Var $ Special $ TupleCon Boxed 2
 
 tuple3 :: ExpG (a -> b -> c -> (a,b,c))
-tuple3 = return $ Var $ Special $ TupleCon Boxed 3
+tuple3 = returnE $ Var $ Special $ TupleCon Boxed 3
 
 tuple4 :: ExpG (a -> b -> c -> d -> (a,b,c,d))
-tuple4 = return $ Var $ Special $ TupleCon Boxed 4
+tuple4 = returnE $ Var $ Special $ TupleCon Boxed 4
 
 tuple5 :: ExpG (a -> b -> c -> d -> (a,b,c,d,e))
-tuple5 = return $ Var $ Special $ TupleCon Boxed 5
+tuple5 = returnE $ Var $ Special $ TupleCon Boxed 5
 
 cons :: ExpG (a -> [a] -> [a])
-cons = return $ Var $ Special Cons
+cons = returnE $ Var $ Special Cons
 
 instance Num t => Num (ExpG t) where
   a + b = add'  <>$ a <>$ b
@@ -89,6 +89,6 @@ instance Num t => Num (ExpG t) where
   a * b = mult' <>$ a <>$ b
   negate a = negate' <>$ a
   abs a    = abs'    <>$ a
-  fromInteger a = return $ Lit $ Int a
+  fromInteger a = returnE $ Lit $ Int a
   signum a = signum' <>$ a
 

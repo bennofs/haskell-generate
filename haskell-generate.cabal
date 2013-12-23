@@ -37,7 +37,8 @@ library
     , template-haskell
   exposed-modules:
       Language.Haskell.Generate
-      Language.Haskell.Generate.Base
+      Language.Haskell.Generate.Monad
+      Language.Haskell.Generate.Expression
       Language.Haskell.Generate.TH
       Language.Haskell.Generate.PreludeDef
 

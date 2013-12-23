@@ -10,7 +10,7 @@ module Language.Haskell.Generate.TH
 
 import Data.Char
 import Language.Haskell.Exts.Syntax hiding (Name)
-import Language.Haskell.Generate.Base hiding (Name)
+import Language.Haskell.Generate.Monad hiding (Name)
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 
@@ -36,8 +36,12 @@ declareNamedThing (thing, name, thingClass) = do
         [| useValue $(lift md) $ $(conE thingClass) $(lift $ nameBase thing) |]
     ]
 
-  where overQuantifiedType f (ForallT bnds ctx t) = ForallT bnds ctx $ overQuantifiedType f t
+  where overQuantifiedType f (ForallT bnds ctx t) = ForallT (map removeKind bnds) ctx $ overQuantifiedType f t
         overQuantifiedType f x = f x
+
+        removeKind :: TyVarBndr -> TyVarBndr
+        removeKind (KindedTV n _) = PlainTV n
+        removeKind x = x
 
 -- | Declare a symbol, using the given name for the definition.
 declareNamedSymbol :: (Name, String) -> DecsQ
