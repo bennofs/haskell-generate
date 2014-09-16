@@ -3,6 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE CPP #-}
 module Language.Haskell.Generate.Monad
   ( Generate(..), ExpG
   , runGenerate, newName
@@ -61,7 +62,11 @@ generateExp = prettyPrint . runExpression . fst . runGenerate
 caseE :: ExpG x -> [(Pat, ExpG t)] -> ExpG t
 caseE v alt = do
   v' <- v
+#if MIN_VERSION_haskell_src_exts(1,16,0)   
+  alt' <- mapM (\(p,a) -> fmap (\a' -> Alt noLoc p (UnGuardedRhs $ runExpression a') (BDecls [])) a) alt
+#else  
   alt' <- mapM (\(p,a) -> fmap (\a' -> Alt noLoc p (UnGuardedAlt $ runExpression a') (BDecls [])) a) alt
+#endif
   return $ Expression $ Case (runExpression v') alt'
 
 -- | Import a function from a module. This function is polymorphic in the type of the resulting expression, 
@@ -205,7 +210,11 @@ instance GenExp (FunRef t) where
 
 -- | Generate a ExportSpec for a given function item.
 exportFun :: FunRef t -> ExportSpec 
+#if MIN_VERSION_haskell_src_exts(1,16,0) 
+exportFun (FunRef name) = EVar NoNamespace (UnQual name)  
+#else
 exportFun (FunRef name) = EVar (UnQual name)
+#endif
 
 -- | Add a declaration to the module. Return a reference to it that can be used to either apply the function to some values or export it.
 addDecl :: Name -> ExpG t -> ModuleM (FunRef t)
@@ -217,7 +226,11 @@ addDecl name e = ModuleM $ do
 -- | Extract the Module from a module generator.
 runModuleM :: ModuleG -> String -> Module
 runModuleM (ModuleM act) name = 
+#if MIN_VERSION_haskell_src_exts(1,16,0) 
+  Module noLoc (ModuleName name) [] Nothing export (map (\md -> ImportDecl noLoc md True False False Nothing Nothing Nothing) $ S.toList imps) decls
+#else
   Module noLoc (ModuleName name) [] Nothing export (map (\md -> ImportDecl noLoc md True False Nothing Nothing Nothing) $ S.toList imps) decls
+#endif
   where (export, (imps, decls)) = runWriter act
 
 -- | Generate the source code for a module.
