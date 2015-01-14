@@ -60,6 +60,7 @@ fmap concat $ mapM declareNamedSymbol
   , ('(++), "append'")
   , ('(!!), "index'")
   , ('(==), "equal'")
+  , ('(/=), "notequal'")
   ]
 
 (<>.) :: ExpG (b -> c) -> ExpG (a -> b) -> ExpG (a -> c)
