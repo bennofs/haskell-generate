@@ -102,4 +102,3 @@ declareFunction 'permutations -- This generates the same code as above, but is m
 ## Contributing
 
 If you have an idea, a question or a bug report, open an issue on github. You can also find me on freenode in the #haskell channel, my nick is bennofs.
-

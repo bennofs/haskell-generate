@@ -1,5 +1,5 @@
 name:          haskell-generate
-version:       0.2.2
+version:       0.2.3
 license:       BSD3
 category:      Code Generation, Language
 cabal-version: >= 1.10
@@ -9,9 +9,12 @@ maintainer:    Benno Fünfstück <benno.fuenfstueck@gmail.com>
 stability:     experimental
 homepage:      http://github.com/bennofs/haskell-generate/
 bug-reports:   http://github.com/bennofs/haskell-generate/issues
-copyright:     Copyright (C) 2013 Benno Fünfstück
-synopsis:      haskell-generate
-description:   haskell-generate
+copyright:     Copyright (C) 2013-2015 Benno Fünfstück
+synopsis:      Typesafe generation of haskell source code
+description:
+  This library provides an interface to generate haskell source code, verifying at compile time
+  that the resulting code typechecks. See https://github.com/bennofs/haskell-generate for an
+  introduction explaining how to use the library.
 build-type:    Custom
 
 extra-source-files:
