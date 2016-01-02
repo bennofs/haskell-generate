@@ -22,5 +22,5 @@ script:
 
 matrix:
   allow_failures:
-   - env: GHCVER=head CABALVER=1.20
+   - env: GHCVER=head CABALVER=1.22
   fast_finish: true
