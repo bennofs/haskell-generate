@@ -64,9 +64,11 @@ generateExp = prettyPrint . runExpression . fst . runGenerate
 caseE :: ExpG x -> [(Pat, ExpG t)] -> ExpG t
 caseE v alt = do
   v' <- v
-#if MIN_VERSION_haskell_src_exts(1,16,0)   
+#if MIN_VERSION_haskell_src_exts(1,17,0)
+  alt' <- mapM (\(p,a) -> fmap (\a' -> Alt noLoc p (UnGuardedRhs $ runExpression a') Nothing) a) alt
+#elif MIN_VERSION_haskell_src_exts(1,16,0)
   alt' <- mapM (\(p,a) -> fmap (\a' -> Alt noLoc p (UnGuardedRhs $ runExpression a') (BDecls [])) a) alt
-#else  
+#else
   alt' <- mapM (\(p,a) -> fmap (\a' -> Alt noLoc p (UnGuardedAlt $ runExpression a') (BDecls [])) a) alt
 #endif
   return $ Expression $ Case (runExpression v') alt'
@@ -212,7 +214,7 @@ instance GenExp (FunRef t) where
 
 -- | Generate a ExportSpec for a given function item.
 exportFun :: FunRef t -> ExportSpec 
-#if MIN_VERSION_haskell_src_exts(1,16,0) 
+#if MIN_VERSION_haskell_src_exts(1,16,0) && !MIN_VERSION_haskell_src_exts(1,17,0)
 exportFun (FunRef name) = EVar NoNamespace (UnQual name)  
 #else
 exportFun (FunRef name) = EVar (UnQual name)
@@ -222,7 +224,11 @@ exportFun (FunRef name) = EVar (UnQual name)
 addDecl :: Name -> ExpG t -> ModuleM (FunRef t)
 addDecl name e = ModuleM $ do
   let (body, mods) = runGenerate e
+#if MIN_VERSION_haskell_src_exts(1,17,0)
+  tell (mods, [FunBind [Match noLoc name [] Nothing (UnGuardedRhs $ runExpression body) Nothing]])
+#else
   tell (mods, [FunBind [Match noLoc name [] Nothing (UnGuardedRhs $ runExpression body) $ BDecls []]])
+#endif
   return $ FunRef name
 
 -- | Extract the Module from a module generator.
