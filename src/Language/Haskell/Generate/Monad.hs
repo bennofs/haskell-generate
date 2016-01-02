@@ -36,6 +36,8 @@ import           Language.Haskell.Exts.SrcLoc
 import           Language.Haskell.Exts.Syntax
 import           Language.Haskell.Generate.Expression
 
+import Prelude
+
 --------------------------------------------------------------------------------
 -- Generate expressions
 
