@@ -13,7 +13,8 @@ copyright:     Copyright (C) 2013-2015 Benno Fünfstück
 synopsis:      Typesafe generation of haskell source code
 description:
   This library provides an interface to generate haskell source code, verifying at compile time
-  that the resulting code typechecks. See https://github.com/bennofs/haskell-generate for an
+  that the resulting code typechecks.
+  See <https://github.com/bennofs/haskell-generate haskell-generate> for an
   introduction explaining how to use the library.
 build-type:    Custom
 
